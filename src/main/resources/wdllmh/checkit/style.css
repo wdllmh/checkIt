@@ -1,0 +1,39 @@
+/* 各个fxml页面相对应的内容 */
+
+/* 主页面 */
+#main {
+    -fx-background-image: url("bg.png");
+    -fx-background-size: stretch; /* 拉伸图片以填充容器 */
+    -fx-background-position: center;
+    -fx-background-repeat: no-repeat;
+    -fx-start-margin: 40;
+    -fx-spacing: 60;
+    -fx-pref-height: 600;
+    -fx-pref-width: 1000;
+}
+
+#main #title{
+    -fx-font-size: 40px;
+    -fx-font-family: "Microsoft YaHei UI";
+}
+/* 按钮居中 */
+VBox > VBox {
+    -fx-alignment: center;
+    -fx-spacing: 15;
+}
+
+#main > VBox > .button {
+    -fx-pref-height: 20;
+    -fx-pref-width: 90;
+}
+
+
+/* check.fxml */
+#check {
+    -fx-pref-height: 600;
+    -fx-pref-width: 1000;
+}
+#check > .table-view {
+    -fx-pref-width: 1000;
+    -fx-pref-height: 500;
+}

@@ -20,6 +20,7 @@ import java.util.Date;
 import java.util.Optional;
 
 public class HelloController {
+    private HelloApplication application;
     @FXML private Text title;
 
     @FXML private VBox main;
@@ -27,7 +28,7 @@ public class HelloController {
 
     @FXML
     protected void goCheckPage(ActionEvent event) {
-        HelloApplication.showScene(1);
+        application.showScene(1);
     }
 
     @FXML
@@ -134,5 +135,8 @@ public class HelloController {
                 });
     }
 
+    public void setApplication(HelloApplication application) {
+        this.application = application;
+    }
 }
 

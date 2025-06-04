@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Text?>
+
+<VBox id="main" alignment="CENTER" prefHeight="400.0" prefWidth="640.0" spacing="20.0" stylesheets="@../css/style.css" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="wdllmh.checkit.HelloController">
+    <padding>
+        <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+    </padding>
+   <Text fx:id="title" strokeType="OUTSIDE" strokeWidth="0.0" text="CheckIt 进出口发票填写助手">
+   </Text>
+    <VBox prefHeight="200.0" prefWidth="600.0">
+        <Button fx:id="check" mnemonicParsing="false" text="查询" onAction="#goCheckPage"/>
+        <Button fx:id="backup" mnemonicParsing="false" text="备份数据库" onAction="#backupDatabase"/>
+        <Button fx:id="backupPhoto" mnemonicParsing="false" text="备份图片" onAction="#backupPhotos"/>
+        <Button fx:id="quit" mnemonicParsing="false" text="退出" onAction="#quit"/>
+    </VBox>
+</VBox>

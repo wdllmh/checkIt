@@ -12,8 +12,8 @@ import static wdllmh.checkit.Dao.executor;
 public class HelloApplication extends Application {
     private static Stage primaryStage;
     private static final String[] fxmlNames = {
-            "Hello-view.fxml",
-            "check.fxml",
+            "/hello-view.fxml",
+            "/check.fxml",
     };
     public static String dbPath = null;
     public static String photoPath = null;
@@ -33,6 +33,11 @@ public class HelloApplication extends Application {
         primaryStage = stage;
         primaryStage.setTitle("CheckIt 进出口发票填写助手");
         showScene(0);
+//        System.err.println("start limian");
+//        System.err.println(HelloApplication.class.getResource(fxmlNames[0]));
+//        System.err.println(HelloApplication.class.getResource("/" + fxmlNames[0]));
+//        System.err.println(HelloApplication.class.getResource("/"));
+//        System.err.println(HelloApplication.class.getResource(""));
     }
 
     @Override
@@ -41,11 +46,20 @@ public class HelloApplication extends Application {
     }
 
 
-    public static void showScene(int index) {
-
+    // 不能使用static否则会导致打包之后不可用
+    // 在jar包环境下使用静态类的getResource返回null，不知道为什么
+    public void showScene(int index) {
         try {
-            FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource(fxmlNames[index]));
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("fxml" + fxmlNames[index]));
             Scene scene = new Scene(fxmlLoader.load());
+            if (index == 0) {
+                HelloController controller = fxmlLoader.getController();
+                controller.setApplication(this);
+            } else if (index == 1) {
+                CheckController controller = fxmlLoader.getController();
+                controller.setApplication(this);
+            }
+
             primaryStage.setScene(scene);
             primaryStage.show();
         } catch (IOException e) {

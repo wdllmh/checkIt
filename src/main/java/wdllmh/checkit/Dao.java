@@ -1,6 +1,5 @@
 package wdllmh.checkit;
 
-import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.embed.swing.SwingFXUtils;
@@ -14,13 +13,12 @@ import javax.imageio.stream.ImageOutputStream;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.net.URL;
 import java.sql.*;
 import java.util.Iterator;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.function.Consumer;
-import java.awt.Graphics2D;
 
 public class Dao {
     private Connection connection = null;
@@ -32,7 +30,12 @@ public class Dao {
     private static final int MAXHEIGHT = 600;
 
     public Dao(String path, String photoDir) {
-        connect(path, photoDir);
+        try {
+            Class.forName("org.sqlite.JDBC"); // 手动加载驱动
+            connect(path, photoDir);
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
     }
 
     public Dao() {
@@ -159,13 +162,14 @@ public class Dao {
     }
 
     public Image getDefaultImage() {
-        File file = new File(System.getProperty("user.dir") + File.separator + "photo" + File.separator + "0.png");
-        if (!file.exists()) {
+        URL url = this.getClass().getResource("image/0.png");
+//        System.out.println(url);
+        if (url == null) {
             return null;
         }
 
         try {
-            BufferedImage bufferedImage = ImageIO.read(file);
+            BufferedImage bufferedImage = ImageIO.read(url);
             if (bufferedImage == null) {
                 return null;
             }

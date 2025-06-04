@@ -26,6 +26,12 @@ public class CheckController {
     // 用于记录操作历史的栈
     private Stack<UndoInfo> undoStack = new Stack<>();
 
+    private HelloApplication application;
+
+    public void setApplication(HelloApplication application) {
+        this.application = application;
+    }
+
     // 工具栏的几个按钮
     @FXML private Button backButton;
     @FXML private Button clearButton;
@@ -101,7 +107,7 @@ public class CheckController {
 
     @FXML
     void goMainPage(ActionEvent event) {
-        HelloApplication.showScene(0);
+        application.showScene(0);
     }
 
     @FXML

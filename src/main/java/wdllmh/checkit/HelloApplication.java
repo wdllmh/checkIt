@@ -4,6 +4,7 @@ import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import wdllmh.checkit.controller.*;
 
 import java.io.IOException;
 
@@ -14,6 +15,9 @@ public class HelloApplication extends Application {
     private static final String[] fxmlNames = {
             "/hello-view.fxml",
             "/check.fxml",
+            "/login.fxml",
+            "/register.fxml",
+            "/forget.fxml",
     };
     public static String dbPath = null;
     public static String photoPath = null;
@@ -32,17 +36,13 @@ public class HelloApplication extends Application {
     public void start(Stage stage){
         primaryStage = stage;
         primaryStage.setTitle("CheckIt 进出口发票填写助手");
-        showScene(0);
-//        System.err.println("start limian");
-//        System.err.println(HelloApplication.class.getResource(fxmlNames[0]));
-//        System.err.println(HelloApplication.class.getResource("/" + fxmlNames[0]));
-//        System.err.println(HelloApplication.class.getResource("/"));
-//        System.err.println(HelloApplication.class.getResource(""));
+        showScene(2);
     }
 
     @Override
-    public void stop() { // 所有东西停止
+    public void stop() throws Exception { // 所有东西停止
         Runtime.getRuntime().addShutdownHook(new Thread(executor::shutdown));
+        super.stop();
     }
 
 
@@ -51,15 +51,40 @@ public class HelloApplication extends Application {
     public void showScene(int index) {
         try {
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("fxml" + fxmlNames[index]));
-            Scene scene = new Scene(fxmlLoader.load());
-            if (index == 0) {
-                HelloController controller = fxmlLoader.getController();
-                controller.setApplication(this);
-            } else if (index == 1) {
-                CheckController controller = fxmlLoader.getController();
-                controller.setApplication(this);
-            }
+            // 自定义控制器工厂，创建控制器后调用setApplication
+            fxmlLoader.setControllerFactory(clazz -> {
+                if (clazz == LoginController.class) {
+                    LoginController controller = new LoginController();
+                    controller.setApplication(this); // 调用setApplication注入
+                    return controller;
+                }
+                else if (clazz == CheckController.class) {
+                    CheckController controller = new CheckController();
+                    controller.setApplication(this);
+                    return controller;
+                } else if (clazz == HelloController.class) {
+                    HelloController controller = new HelloController();
+                    controller.setApplication(this);
+                    return controller;
+                }
+                else if (clazz == RegisterController.class) {
+                    RegisterController controller = new RegisterController();
+                    controller.setApplication(this);
+                    return controller;
+                }
+                else if (clazz == ForgetController.class) {
+                    ForgetController controller = new ForgetController();
+                    controller.setApplication(this);
+                    return controller;
+                }
+                try {
+                    return clazz.getDeclaredConstructor().newInstance();
+                } catch (Exception e) {
+                    throw new RuntimeException(e);
+                }
+            });
 
+            Scene scene = new Scene(fxmlLoader.load());
             primaryStage.setScene(scene);
             primaryStage.show();
         } catch (IOException e) {

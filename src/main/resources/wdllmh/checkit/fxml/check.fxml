@@ -11,7 +11,7 @@
 
 <VBox id="check" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
       stylesheets="@../css/style.css" xmlns="http://javafx.com/javafx/17"
-      xmlns:fx="http://javafx.com/fxml/1" fx:controller="wdllmh.checkit.CheckController">
+      xmlns:fx="http://javafx.com/fxml/1" fx:controller="wdllmh.checkit.controller.CheckController">
     <ToolBar prefHeight="40.0" prefWidth="200.0">
         <Text strokeType="OUTSIDE" strokeWidth="0.0" text="查询关键词"/>
         <TextField fx:id="queryField"/>

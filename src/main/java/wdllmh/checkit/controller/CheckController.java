@@ -1,4 +1,4 @@
-package wdllmh.checkit;
+package wdllmh.checkit.controller;
 
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
@@ -12,6 +12,9 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.*;
 import javafx.util.StringConverter;
+import wdllmh.checkit.Dao;
+import wdllmh.checkit.DataRow;
+import wdllmh.checkit.HelloApplication;
 
 import java.io.File;
 import java.sql.SQLException;

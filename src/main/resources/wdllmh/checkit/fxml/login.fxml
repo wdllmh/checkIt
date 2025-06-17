@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.paint.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.shape.Rectangle?>
+
+<VBox spacing="20" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="wdllmh.checkit.controller.LoginController"
+      stylesheets="@../css/login.css">
+
+    <Label text="用户登录" style="-fx-font-size: 24px; -fx-font-weight: bold; -fx-text-fill: #333;" />
+
+    <TextField fx:id="usernameField" promptText="用户名/账号"
+               style="-fx-padding: 12 15; -fx-border-color: #e0e6ed; -fx-border-radius: 5; -fx-font-size: 14px;" />
+
+    <PasswordField fx:id="passwordField" promptText="密码"
+                   style="-fx-padding: 12 15; -fx-border-color: #e0e6ed; -fx-border-radius: 5; -fx-font-size: 14px;" />
+
+    <HBox spacing="10" alignment="CENTER_LEFT">
+        <Label text="忘记密码?" style="-fx-text-fill: #4a90e2; -fx-cursor: hand;" fx:id="forget"/>
+    </HBox>
+
+    <Button fx:id="loginButton" text="登录"
+            style="-fx-background-color: #4a90e2; -fx-text-fill: white; -fx-padding: 12 20; -fx-font-size: 14px; -fx-border-radius: 5; -fx-cursor: hand;" />
+
+    <Label text="还没有账号? 立即注册" style="-fx-text-fill: #666; -fx-font-size: 14px;" fx:id="register"/>
+</VBox>

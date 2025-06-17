@@ -1,4 +1,4 @@
-package wdllmh.checkit;
+package wdllmh.checkit.controller;
 
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
@@ -9,6 +9,7 @@ import javafx.scene.control.ButtonType;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
+import wdllmh.checkit.HelloApplication;
 
 import java.io.File;
 import java.io.IOException;
@@ -45,6 +46,7 @@ public class HelloController {
         if (result.get() == ButtonType.OK){
             // ... user chose OK
             Platform.exit();
+            System.exit(0);
             //否则
         } else {
             event.consume();

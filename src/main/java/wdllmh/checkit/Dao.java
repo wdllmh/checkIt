@@ -14,8 +14,12 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.security.SecureRandom;
 import java.sql.*;
 import java.util.Iterator;
+import java.util.Random;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -24,10 +28,175 @@ public class Dao {
     private Connection connection = null;
     private String photoDir = null;
     private String dbDir = null;
-    protected static final ExecutorService executor = Executors.newFixedThreadPool(2);
+    protected static final ExecutorService executor = Executors.newFixedThreadPool(5);
 
     private static final int MAXWIDTH = 800;
     private static final int MAXHEIGHT = 600;
+
+    //---------用户表部分----------
+    private static final Random RANDOM = new SecureRandom();
+    private static final String ALGORITHM = "MD5";
+    private static final int SALT_LENGTH = 16; // 盐值长度
+
+    // 生成随机盐值
+    private String generateSalt() {
+        byte[] salt = new byte[SALT_LENGTH];
+        RANDOM.nextBytes(salt);
+        return bytesToHex(salt);
+    }
+
+    // 将字节数组转换为十六进制字符串
+    private String bytesToHex(byte[] bytes) {
+        StringBuilder result = new StringBuilder();
+        for (byte b : bytes) {
+            result.append(String.format("%02x", b));
+        }
+        return result.toString();
+    }
+
+    // 加盐MD5加密
+    private String encryptWithSalt(String password, String salt) {
+        try {
+            MessageDigest md = MessageDigest.getInstance(ALGORITHM);
+            md.update(hexToBytes(salt));
+            byte[] hashedPassword = md.digest(password.getBytes());
+            return bytesToHex(hashedPassword);
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+            throw new RuntimeException("MD5算法不可用", e);
+        }
+    }
+
+    // 十六进制字符串转换为字节数组
+    private byte[] hexToBytes(String hex) {
+        byte[] result = new byte[hex.length() / 2];
+        for (int i = 0; i < result.length; i++) {
+            int index = i * 2;
+            result[i] = (byte) Integer.parseInt(hex.substring(index, index + 2), 16);
+        }
+        return result;
+    }
+
+    /**
+     * 注册新用户
+     * @param username 用户名
+     * @param password 明文密码
+     * @return 注册是否成功
+     */
+    public boolean registerUser(String username, String password) {
+        if (username == null || username.isEmpty() || password == null || password.isEmpty()) {
+            return false;
+        }
+
+        String sql = "INSERT INTO users (user, passwd, salt) VALUES (?, ?, ?)";
+        String salt = generateSalt();
+        String encryptedPassword = encryptWithSalt(password, salt);
+
+        try (PreparedStatement pstmt = this.connection.prepareStatement(sql)) {
+            pstmt.setString(1, username);
+            pstmt.setString(2, encryptedPassword);
+            pstmt.setString(3, salt);
+            pstmt.executeUpdate();
+            return true;
+        } catch (SQLException e) {
+            // 处理唯一约束冲突（用户名已存在）
+            if (e.getErrorCode() == 19) { // SQLite唯一约束错误码
+                System.err.println("用户名已存在");
+            } else {
+                e.printStackTrace();
+            }
+            return false;
+        }
+    }
+
+    /**
+     * 检查用户名是否存在
+     */
+    public boolean userExists(String username) {
+        String sql = "SELECT COUNT(*) FROM users WHERE user = ?";
+        try (PreparedStatement pstmt = this.connection.prepareStatement(sql)) {
+            pstmt.setString(1, username);
+            try (ResultSet rs = pstmt.executeQuery()) {
+                return rs.getInt(1) > 0;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    /**
+     * 验证用户登录
+     * @param username 用户名
+     * @param password 明文密码
+     * @return 验证是否成功
+     */
+    public boolean verifyUser(String username, String password) {
+        if (username == null || username.isEmpty() || password == null || password.isEmpty()) {
+            return false;
+        }
+
+        String sql = "SELECT passwd, salt FROM users WHERE user = ?";
+        try (PreparedStatement pstmt = this.connection.prepareStatement(sql)) {
+            pstmt.setString(1, username);
+            try (ResultSet rs = pstmt.executeQuery()) {
+                if (rs.next()) {
+                    String storedPassword = rs.getString("passwd");
+                    String salt = rs.getString("salt");
+                    String encryptedPassword = encryptWithSalt(password, salt);
+                    return encryptedPassword.equals(storedPassword);
+                }
+                return false;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    /**
+     * 修改用户密码
+     */
+    public boolean changePassword(String username, String oldPassword, String newPassword) {
+        if (!verifyUser(username, oldPassword)) {
+            return false;
+        }
+        return changePassword(username, newPassword);
+    }
+    /**
+     * 重置用户密码，用于忘记密码后进行修改
+     */
+    public boolean changePassword(String username, String newPassword) {
+        String sql = "UPDATE users SET passwd = ?, salt = ? WHERE user = ?";
+        String salt = generateSalt();
+        String encryptedPassword = encryptWithSalt(newPassword, salt);
+
+        try (PreparedStatement pstmt = this.connection.prepareStatement(sql)) {
+            pstmt.setString(1, encryptedPassword);
+            pstmt.setString(2, salt);
+            pstmt.setString(3, username);
+            return pstmt.executeUpdate() > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    /**
+     * 异步注册用户
+     */
+    public CompletableFuture<Boolean> registerUserAsync(String username, String password) {
+        return CompletableFuture.supplyAsync(() -> registerUser(username, password), executor);
+    }
+
+    /**
+     * 异步验证用户
+     */
+    public CompletableFuture<Boolean> verifyUserAsync(String username, String password) {
+        return CompletableFuture.supplyAsync(() -> verifyUser(username, password), executor);
+    }
+
+    /// end
 
     public Dao(String path, String photoDir) {
         try {
@@ -107,6 +276,31 @@ public class Dao {
             e.printStackTrace();
         }
 
+        // 如果user表不存在则创建
+        sql = """
+            CREATE TABLE IF NOT EXISTS data (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                name TEXT NOT NULL,
+                english TEXT NOT NULL,
+                weight REAL DEFAULT 0.0,
+                comment TEXT
+            );""";
+
+        try (Statement stmt = this.connection.createStatement()) {
+            stmt.execute(sql);
+
+            // 新增user表创建语句
+            String userTableSql = """
+                CREATE TABLE IF NOT EXISTS users (
+                    id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    user TEXT UNIQUE NOT NULL,
+                    passwd TEXT NOT NULL,
+                    salt TEXT NOT NULL
+                );""";
+            stmt.execute(userTableSql);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
 
     }
 

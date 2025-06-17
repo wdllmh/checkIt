@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="wdllmh.checkit.controller.ForgetController"
+            stylesheets="@../css/forget.css"
+            spacing="20">
+
+    <Label text="找回密码" style="-fx-font-size: 24px; -fx-font-weight: bold; -fx-text-fill: #333;"></Label>
+
+    <TextField fx:id="usernameFiled" promptText="用户名/账号"
+               style="-fx-padding: 12 15; -fx-border-color: #e0e6ed; -fx-border-radius: 5; -fx-font-size: 14px;"></TextField>
+    <TextField fx:id="emailFiled" promptText="邮箱"
+               style="-fx-padding: 12 15; -fx-border-color: #e0e6ed; -fx-border-radius: 5; -fx-font-size: 14px;"></TextField>
+    <Button fx:id="sendVeriCode" text="发送验证码"
+            style="-fx-background-color: #4a90e2; -fx-text-fill: white; -fx-padding: 12 20; -fx-font-size: 14px; -fx-border-radius: 5; -fx-cursor: hand;"></Button>
+    <TextField fx:id="veriCodeFiled" promptText="请输入邮箱中的验证码（如无请查看垃圾邮件箱）"
+               style="-fx-padding: 12 15; -fx-border-color: #e0e6ed; -fx-border-radius: 5; -fx-font-size: 14px;"></TextField>
+    <PasswordField fx:id="newPasswordField" promptText="新密码（8-20位）"
+               style="-fx-padding: 12 15; -fx-border-color: #e0e6ed; -fx-border-radius: 5; -fx-font-size: 14px;"></PasswordField>
+    <PasswordField fx:id="newPasswordTwoField" promptText="再次输入新密码"
+               style="-fx-padding: 12 15; -fx-border-color: #e0e6ed; -fx-border-radius: 5; -fx-font-size: 14px;"></PasswordField>
+    <Button fx:id="change" text="修改密码"
+            style="-fx-background-color: #4a90e2; -fx-text-fill: white; -fx-padding: 12 20; -fx-font-size: 14px; -fx-border-radius: 5; -fx-cursor: hand;"></Button>
+
+    <HBox spacing="10" alignment="CENTER_LEFT">
+        <Label text="返回登录" style="-fx-text-fill: #4a90e2; -fx-cursor: hand;" fx:id="login"/>
+    </HBox>
+</VBox>

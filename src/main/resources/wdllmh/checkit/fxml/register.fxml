@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.paint.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.shape.Rectangle?>
+
+<VBox spacing="20" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="wdllmh.checkit.controller.RegisterController"
+      stylesheets="@../css/register.css">
+
+    <VBox spacing="20" style="-fx-padding: 30;">
+        <Label text="用户注册" style="-fx-font-size: 24px; -fx-font-weight: bold; -fx-text-fill: #333;" />
+
+        <TextField fx:id="usernameField" promptText="用户名（5-20位）"
+                   style="-fx-padding: 12 15; -fx-border-color: #e0e6ed; -fx-border-radius: 5; -fx-font-size: 14px;" />
+
+        <PasswordField fx:id="passwordField" promptText="密码（8-20位）"
+                       style="-fx-padding: 12 15; -fx-border-color: #e0e6ed; -fx-border-radius: 5; -fx-font-size: 14px;" />
+
+        <PasswordField fx:id="confirmPasswordField" promptText="确认密码"
+                       style="-fx-padding: 12 15; -fx-border-color: #e0e6ed; -fx-border-radius: 5; -fx-font-size: 14px;" />
+
+        <TextField fx:id="emailField" promptText="电子邮箱"
+                   style="-fx-padding: 12 15; -fx-border-color: #e0e6ed; -fx-border-radius: 5; -fx-font-size: 14px;" />
+
+        <HBox spacing="10" alignment="CENTER_LEFT">
+            <CheckBox fx:id="agreementCheckbox" text="我同意用户协议和隐私政策"
+                      style="-fx-text-fill: #666; -fx-font-size: 14px;" />
+        </HBox>
+
+        <Button fx:id="registerButton" text="注册"
+                style="-fx-background-color: #4a90e2; -fx-text-fill: white; -fx-padding: 12 20; -fx-font-size: 14px; -fx-border-radius: 5; -fx-cursor: hand;" />
+
+        <HBox spacing="5" alignment="CENTER">
+            <Label text="已有账号?" style="-fx-text-fill: #666; -fx-font-size: 14px;" />
+            <Label text="立即登录" style="-fx-text-fill: #4a90e2; -fx-cursor: hand; -fx-underline: true;" fx:id="login"/>
+        </HBox>
+    </VBox>
+</VBox>

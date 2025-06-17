@@ -1,0 +1,84 @@
+/* 根容器样式 */
+.root {
+    -fx-padding: 30 50 30 50;
+    -fx-background-color: #f5f7fa;
+}
+
+/* 标题样式 */
+.label {
+    -fx-font-size: 24px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #333;
+}
+
+/* 输入框基本样式 */
+.text-field, .password-field {
+    -fx-padding: 12 15;
+    -fx-border-color: #e0e6ed;
+    -fx-border-radius: 5;
+    -fx-font-size: 14px;
+    -fx-background-color: white;
+    -fx-transition: all 0.3s;
+}
+
+/* 输入框焦点样式 */
+.text-field:focused, .password-field:focused {
+    -fx-border-color: #4a90e2;
+    -fx-border-width: 2;
+    -fx-background-color: white;
+}
+
+/* 复选框样式 */
+.check-box {
+    -fx-text-fill: #666;
+    -fx-font-size: 14px;
+}
+
+/* 按钮基本样式 */
+.button {
+    -fx-background-color: #4a90e2;
+    -fx-text-fill: white;
+    -fx-padding: 12 20;
+    -fx-font-size: 14px;
+    -fx-border-radius: 5;
+    -fx-cursor: hand;
+    -fx-transition: all 0.3s ease;
+    -fx-border-width: 0;
+}
+
+/* 按钮悬停样式 */
+.button:hover {
+    -fx-background-color: #357abd;
+    -fx-scale-x: 1.03;
+    -fx-scale-y: 1.03;
+}
+
+/* 按钮按下样式 */
+.button:pressed {
+    -fx-scale-x: 0.98;
+    -fx-scale-y: 0.98;
+}
+
+/* 链接标签样式 */
+.label:contains("登录"), .label:contains("注册") {
+    -fx-text-fill: #4a90e2;
+    -fx-cursor: hand;
+    -fx-underline: true;
+}
+
+/* 链接标签悬停样式 */
+.label:contains("登录"):hover, .label:contains("注册"):hover {
+    -fx-text-fill: #357abd;
+}
+
+/* 错误提示样式 */
+.error {
+    -fx-border-color: #ff5252;
+    -fx-border-width: 1;
+}
+
+/* 表单内标签样式 */
+.form-label {
+    -fx-text-fill: #666;
+    -fx-font-size: 14px;
+}
